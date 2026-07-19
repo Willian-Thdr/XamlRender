@@ -7,8 +7,8 @@ using Microsoft.Win32;
 namespace XamlRender.Source;
 public partial class MainWindow : Window
 {
+    private Window? windowPreview;
     private FileSystemWatcher watcher;
-    private Window windowPreview;
     
     public MainWindow()
     {
@@ -27,7 +27,7 @@ public partial class MainWindow : Window
         }
     }
 
-    private void LoadButton(Object sender, EventArgs e)
+    private void LoadButton(object sender, EventArgs e)
     {
         OpenFileDialog dialog = new OpenFileDialog();
 
@@ -42,8 +42,12 @@ public partial class MainWindow : Window
         }
     }
 
-    private void Watch(String path)
+    private CancellationTokenSource reload;
+
+    private void Watch(string path)
     {
+        watcher?.Dispose();
+        reload?.Cancel();
         watcher = new FileSystemWatcher();
 
         watcher.Path = Path.GetDirectoryName(path);
@@ -51,42 +55,89 @@ public partial class MainWindow : Window
 
         watcher.NotifyFilter = NotifyFilters.LastWrite;
 
-        watcher.Changed += Reload;
+        watcher.Changed += (_, _) =>
+        {
+            reload?.Cancel();
+
+            reload = new CancellationTokenSource();
+
+            _ = Task.Run(async () =>
+            {
+                try
+                {
+                    await Task.Delay(300, reload.Token);
+
+                    Dispatcher.Invoke(() =>
+                    {
+                        Load(path);
+                    });
+                } catch (TaskCanceledException)
+                {
+                }
+            });
+        };
 
         watcher.EnableRaisingEvents = true;
 
         Load(path);
     }
 
-    private void Reload(Object sender, FileSystemEventArgs e)
+    private string ReadWhenSafe(string path)
     {
-        Thread.Sleep(100);
-
-        Application.Current.Dispatcher.Invoke(() =>
+        for (int i = 0; i < 10; i++)
         {
-            Load(e.FullPath);
-        });
+            try
+            {
+                return File.ReadAllText(path);
+            } 
+            catch(IOException)
+            {
+                Thread.Sleep(100);
+            }
+        }
+
+        throw new IOException("Não foi possível ler o arquivo");
     }
 
     private void Load(string way)
     {
         try
         {
-            string xaml = File.ReadAllText(way);
-    
+            string xaml = ReadWhenSafe(way);
+
             xaml = Regex.Replace(
                 xaml,
                 @"x:Class=""[^""]*""",
                 ""
             );
-    
-            windowPreview?.Close();
-            windowPreview = (Window)XamlReader.Parse(xaml);
+
+            Window newWindow = (Window)XamlReader.Parse(xaml);
+
+            if (windowPreview != null)
+            {
+                newWindow.Left = windowPreview.Left;
+                newWindow.Top = windowPreview.Top;
+                newWindow.WindowStartupLocation = windowPreview.WindowStartupLocation;
+
+                windowPreview.Close();
+            }
+
+            windowPreview = newWindow;
             windowPreview.Show();
-            
+
         } catch (Exception e)
         {
-            MessageBox.Show(e.ToString());
+            switch (e)
+            {
+                case NullReferenceException:
+                    MessageBox.Show("O arquivo escolhido não contém nenhuma linha de código dentro de <Window>." + 
+                    "\nPor favor, escolher um arquivo que contenha algo escrito.");
+                break;
+
+                default:
+                    MessageBox.Show($"Erro: {e}");
+                break;
+            }
         }
     }
 }
