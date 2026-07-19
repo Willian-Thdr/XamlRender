@@ -127,7 +127,8 @@ public partial class MainWindow : Window
                 "Drop",
                 "DragEnter",
                 "DragLeave",
-                "DragOver"
+                "DragOver",
+                "x:Class"
             };
 
             foreach (var ev in events)
