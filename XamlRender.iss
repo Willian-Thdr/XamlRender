@@ -3,7 +3,7 @@
 ; Non-commercial use only
 
 #define MyAppName "XamlRender"
-#define MyAppVersion "0.1.1"
+#define MyAppVersion "1.1"
 #define MyAppPublisher "Willian-Thdr"
 #define MyAppURL "https://github.com/Willian-Thdr"
 #define MyAppExeName "MyProg-x64.exe"
