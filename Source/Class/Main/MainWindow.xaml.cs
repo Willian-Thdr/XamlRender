@@ -105,11 +105,35 @@ public partial class MainWindow : Window
         {
             string xaml = ReadWhenSafe(way);
 
-            xaml = Regex.Replace(
-                xaml,
-                @"x:Class=""[^""]*""",
-                ""
-            );
+            string[] events =
+            {
+                "Click",
+                "Loaded",
+                "Unloaded",
+                "Initialized",
+                "Closing",
+                "Closed",
+                "MouseDown",
+                "MouseUp",
+                "MouseMove",
+                "MouseEnter",
+                "MouseLeave",
+                "KeyDown",
+                "KeyUp",
+                "TextChanged",
+                "SelectionChanged",
+                "Checked",
+                "Unchecked",
+                "Drop",
+                "DragEnter",
+                "DragLeave",
+                "DragOver"
+            };
+
+            foreach (var ev in events)
+            {
+                xaml = Regex.Replace(xaml, $@"{ev}=""[^""]*""", "");
+            }
 
             Window newWindow = (Window)XamlReader.Parse(xaml);
 
