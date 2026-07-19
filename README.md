@@ -10,6 +10,8 @@ This facilitates the work using the WPF Framework tool, so that it is not necess
 When you start the application, the File Explorer window will apper where you select your file to visualize it.  
 If you want to load two windows or more, you can press a button named "Carregar arquivo" in the menu window. When it is pressed, appair the File Explorer again, and you can select other file.
 
+[Here is a demo] (https://github.com/Willian-Thdr/XamlRender/releases/download/v1.1/Funcionamento.do.XamlRender.2026-07-19.18h13.mp4)
+
 ## Next Additions
 
 I will add more things in software, like:
