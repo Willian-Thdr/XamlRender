@@ -1,19 +1,19 @@
-# XamlRender v1.0
+# XamlRender v0.1.1
 
-## Descrição
+## Description
 
-Este projeto é um visualizador de XAML. Aqui você pode escolher um arquivo .XAML que esteja editando e pode visualizar em tempo real as mudanças que são feitas no arquivo.  
-Isso facilita a edição de janelas com o framework WPF, fazendo com que não seja mais necessário compilar o código e executar o projeto para visualizar o que está sendo feito. 
+This project is an XAML viewer. Here, you can select a .XAML file you are editing and view changes made to the file in real time.  
+This facilitates the work using the WPF Framework tool, so that it is not necessary compile the code and execute the program for to visualize changes.
 
-## Modo de usar
+## How to use
 
-Ao ser executado, aparecerá uma janela do Explorador de Arquivos onde você escolherá o seu arquivo que deseja visualizar.  
-Caso queira carregar duas janelas diferentes, no menu da janela do Visualizador você terá um botão escrito "Carregar arquivo". Ao pressioná-lo, o Explorador de Arquivos será aberto novamente no último diretório em que foi aberto. 
+When you start the application, the File Explorer window will apper where you select your file to visualize it.  
+If you want to load two windows or more, you can press a button named "Carregar arquivo" in the menu window. When it is pressed, appair the File Explorer again, and you can select other file.
 
-# Próximas adições
+## Next Additions
 
-Futuramente irei adicionar mais coisas ao software, como:
+I will add more things in software, like:
 
-- Tema Escuro;
-- Suporte ao carregamento de estilos e extensões XAML, como um arquivo próprio para definição da aparência da interface;
-- Uma janela que exiba possíveis erros no arquivo XAML, como um parâmetro não fechado.
+- Dark theme;
+- Support for styles for the Window opened;
+- One window of display the writing errors.
